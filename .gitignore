@@ -114,9 +114,9 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
+links.json
 config.json
 config_test.json
 private/config*
 *config.json
 *config.yaml
-*links.json
