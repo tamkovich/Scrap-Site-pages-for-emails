@@ -1,13 +1,21 @@
 import urllib.request
+import urllib.error
 import re
 
 
 class Common:
 
     @staticmethod
-    def get_html(url):
-        response = urllib.request.urlopen(url)
-        return response.read()
+    def get_html(url: str):
+        """
+        Returns html from url if url is valid
+        :param url: <str> any url address
+        :return: <bytes> page content or None if url return error
+        """
+        try:
+            return urllib.request.urlopen(url).read()
+        except urllib.error.HTTPError:
+            return
 
     @staticmethod
     def links_from_page(url, tags):

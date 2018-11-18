@@ -1,13 +1,21 @@
 from bs4 import BeautifulSoup
+import logging
 
 from common import Common
+
+module_logger = logging.getLogger("spider.models")
 
 
 class Site:
 
     tags_a = None
 
+    __width = 50
+
     def __init__(self, url):
+        self.logger = logging.getLogger("spider.models.Site.__init__")
+        self.logger.info("Scrap: "+url)
+
         self.url = url
         self.link = url
         self.links = {}
@@ -19,6 +27,9 @@ class Site:
 
     def prepare_html(self, link):
         self.html = Common.get_html(link)
+        if self.html is None:
+            self.logger.error(link)
+            self.html = b''
 
     def prepare_tags_a(self, html):
         soup = BeautifulSoup(html, features="html.parser")
@@ -37,7 +48,7 @@ class Site:
 
     def activate_spider(self):
         while not self.all_scraped_links():
-            for link in self.links[:20]:
+            for link in list(self.links.keys())[:self.__width]:
                 if not self.links[link]:
                     self.link = link
                     self.prepare_html(self.link)
@@ -47,7 +58,7 @@ class Site:
                     break
 
     def all_scraped_links(self):
-        for link in self.links:
+        for link in list(self.links.keys())[:self.__width]:
             if not self.links[link]:
                 return False
         return True
