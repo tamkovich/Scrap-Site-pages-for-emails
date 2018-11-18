@@ -21,7 +21,10 @@ class Common:
     def links_from_page(url, tags):
         links = []
         for tag in tags:
-            link = tag.get('href').strip('#')
+            link = tag.get('href')
+            if link is None:
+                continue
+            link = link.strip('#')
             if url not in link:
                 if 'http' in link:
                     continue
